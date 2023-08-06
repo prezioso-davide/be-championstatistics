@@ -16,7 +16,7 @@ import java.util.Optional;
 public class StadiumServiceImpl implements StadiumService{
 
     @Autowired
-    public StadiumRepository stadiumRepository;
+    private StadiumRepository stadiumRepository;
 
     @Override
     public List<StadiumViewDTO> getAllStadiums() {

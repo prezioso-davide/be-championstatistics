@@ -3,7 +3,6 @@ package com.db2.uefastatistics.service.stadium;
 import com.db2.uefastatistics.dto.stadium.StadiumCreationDTO;
 import com.db2.uefastatistics.dto.stadium.StadiumUpdateDTO;
 import com.db2.uefastatistics.dto.stadium.StadiumViewDTO;
-import com.db2.uefastatistics.model.Stadium;
 
 import java.util.List;
 

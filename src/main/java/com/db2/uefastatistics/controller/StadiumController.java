@@ -1,4 +1,4 @@
-package com.db2.uefastatistics.controller.stadium;
+package com.db2.uefastatistics.controller;
 
 import com.db2.uefastatistics.dto.stadium.StadiumCreationDTO;
 import com.db2.uefastatistics.dto.stadium.StadiumUpdateDTO;
