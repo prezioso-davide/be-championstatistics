@@ -10,5 +10,6 @@ public class TeamViewDTO {
     String teamName;
     String country;
     String stadiumId;
+    String stadiumName;
 
 }

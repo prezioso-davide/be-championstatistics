@@ -157,7 +157,9 @@ public class TeamServiceImpl implements TeamService{
         teamDTO.setCountry(team.getCountry());
 
         if(team.getStadiumId() != null){
+            Optional<Stadium> stadium = stadiumRepository.findById(team.getStadiumId().toString());
             teamDTO.setStadiumId(team.getStadiumId().toString());
+            teamDTO.setStadiumName(stadium.get().getStadiumName());
         }
 
         return teamDTO;
