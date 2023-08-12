@@ -1,14 +1,11 @@
 package com.db2.uefastatistics.service.match;
 
+import com.db2.uefastatistics.dto.goal.GoalViewDTO;
 import com.db2.uefastatistics.dto.match.MatchCreationDTO;
 import com.db2.uefastatistics.dto.match.MatchUpdateDTO;
 import com.db2.uefastatistics.dto.match.MatchViewDTO;
-import com.db2.uefastatistics.model.Match;
-import com.db2.uefastatistics.model.Stadium;
-import com.db2.uefastatistics.model.Team;
-import com.db2.uefastatistics.repository.MatchRepository;
-import com.db2.uefastatistics.repository.StadiumRepository;
-import com.db2.uefastatistics.repository.TeamRepository;
+import com.db2.uefastatistics.model.*;
+import com.db2.uefastatistics.repository.*;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +26,12 @@ public class MatchServiceImpl implements MatchService{
     @Autowired
     public StadiumRepository stadiumRepository;
 
+    @Autowired
+    public GoalRepository goalRepository;
+
+    @Autowired
+    public PlayerRepository playerRepository;
+
     @Override
     public List<MatchViewDTO> getAllMatches() {
         List<Match> list = matchRepository.findAll();
@@ -38,8 +41,8 @@ public class MatchServiceImpl implements MatchService{
             throw new RuntimeException("Nessuna partita trovata");
         }
 
-        for (Match p: list) {
-            listDTO.add(entityToDTO(p));
+        for (Match m: list) {
+            listDTO.add(entityToDTO(m));
         }
 
         return listDTO;
@@ -68,8 +71,8 @@ public class MatchServiceImpl implements MatchService{
             throw new RuntimeException("Nessuna partita trovata");
         }
 
-        for (Match p: list) {
-            listDTO.add(entityToDTO(p));
+        for (Match m: list) {
+            listDTO.add(entityToDTO(m));
         }
 
         return listDTO;
@@ -85,8 +88,8 @@ public class MatchServiceImpl implements MatchService{
             throw new RuntimeException("Nessuna partita trovata");
         }
 
-        for (Match p: list) {
-            listDTO.add(entityToDTO(p));
+        for (Match m: list) {
+            listDTO.add(entityToDTO(m));
         }
 
         return listDTO;
@@ -102,8 +105,8 @@ public class MatchServiceImpl implements MatchService{
             throw new RuntimeException("Nessuna partita trovata");
         }
 
-        for (Match p: list) {
-            listDTO.add(entityToDTO(p));
+        for (Match m: list) {
+            listDTO.add(entityToDTO(m));
         }
 
         return listDTO;
@@ -119,8 +122,8 @@ public class MatchServiceImpl implements MatchService{
             throw new RuntimeException("Nessuna partita trovata");
         }
 
-        for (Match p: list) {
-            listDTO.add(entityToDTO(p));
+        for (Match m: list) {
+            listDTO.add(entityToDTO(m));
         }
 
         return listDTO;
@@ -240,18 +243,61 @@ public class MatchServiceImpl implements MatchService{
         matchDTO.setPenalityShootOut(match.getPenalityShootOut());
 
         if(match.getHomeTeam() != null){
+            Optional<Team> homeTeam = teamRepository.findById(match.getHomeTeam().toString());
             matchDTO.setHomeTeam(match.getHomeTeam().toString());
+            matchDTO.setHomeTeamName(homeTeam.get().getTeamName());
         }
 
         if(match.getAwayTeam() != null){
+            Optional<Team> awayTeam = teamRepository.findById(match.getAwayTeam().toString());
             matchDTO.setAwayTeam(match.getAwayTeam().toString());
+            matchDTO.setAwayTeamName(awayTeam.get().getTeamName());
         }
 
         if(match.getStadiumId() != null){
+            Optional<Stadium> stadium = stadiumRepository.findById(match.getStadiumId().toString());
             matchDTO.setStadiumId(match.getStadiumId().toString());
+            matchDTO.setStadiumName(stadium.get().getStadiumName());
+        }
+
+        List<Goal> goalsMatch = goalRepository.findByMatchId(new ObjectId(match.getId()));
+        if(goalsMatch != null) {
+            List<GoalViewDTO> listDTO = listEntityToListDTO(goalsMatch);
+
+            matchDTO.setGoals(listDTO);
         }
 
         return matchDTO;
+    }
+
+    private List<GoalViewDTO> listEntityToListDTO(List<Goal> goals) {
+        List<GoalViewDTO> listDTO = new ArrayList<>();
+
+        for (Goal g: goals) {
+            GoalViewDTO goalDTO = new GoalViewDTO();
+            goalDTO.setId(g.getId());
+            goalDTO.setMinute(g.getMinute());
+            goalDTO.setDescription(g.getDescription());
+
+            if(g.getPlayerId() != null){
+                Optional<Player> player = playerRepository.findById(g.getPlayerId().toString());
+                goalDTO.setPlayerId(g.getPlayerId().toString());
+                goalDTO.setPlayerFullName(player.get().getFirstName() + " " + player.get().getLastName());
+            }
+
+            if(g.getAssist() != null){
+                Optional<Player> assist = playerRepository.findById(g.getAssist().toString());
+                goalDTO.setAssist(g.getAssist().toString());
+                goalDTO.setAssistFullName(assist.get().getFirstName() + " " + assist.get().getLastName());
+            }
+
+            if(g.getMatchId() != null){
+                goalDTO.setMatchId(g.getMatchId().toString());
+            }
+            listDTO.add(goalDTO);
+        }
+
+        return listDTO;
     }
     
 }

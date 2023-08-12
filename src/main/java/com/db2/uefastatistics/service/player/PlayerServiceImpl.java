@@ -178,7 +178,9 @@ public class PlayerServiceImpl implements PlayerService{
         playerDTO.setFoot(player.getFoot());
 
         if(player.getTeamId() != null){
+            Optional<Team> team = teamRepository.findById(player.getTeamId().toString());
             playerDTO.setTeamId(player.getTeamId().toString());
+            team.ifPresent(value -> playerDTO.setTeamName(value.getTeamName()));
         }
 
         return playerDTO;

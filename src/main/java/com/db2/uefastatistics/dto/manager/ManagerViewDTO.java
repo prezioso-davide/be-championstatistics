@@ -16,5 +16,6 @@ public class ManagerViewDTO {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     Date birthday;
     String teamId;
+    String teamName;
 
 }

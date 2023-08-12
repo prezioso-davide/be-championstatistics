@@ -163,7 +163,9 @@ public class ManagerServiceImpl implements ManagerService{
         managerDTO.setBirthday(manager.getBirthday());
 
         if(manager.getTeamId() != null){
+            Optional<Team> team = teamRepository.findById(manager.getTeamId().toString());
             managerDTO.setTeamId(manager.getTeamId().toString());
+            managerDTO.setTeamName(team.get().getTeamName());
         }
 
         return managerDTO;

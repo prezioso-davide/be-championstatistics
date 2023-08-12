@@ -212,11 +212,15 @@ public class GoalServiceImpl implements GoalService{
         goalDTO.setDescription(goal.getDescription());
 
         if(goal.getPlayerId() != null){
+            Optional<Player> player = playerRepository.findById(goal.getPlayerId().toString());
             goalDTO.setPlayerId(goal.getPlayerId().toString());
+            goalDTO.setPlayerFullName(player.get().getFirstName() + " " + player.get().getLastName());
         }
 
         if(goal.getAssist() != null){
+            Optional<Player> assist = playerRepository.findById(goal.getAssist().toString());
             goalDTO.setAssist(goal.getAssist().toString());
+            goalDTO.setAssistFullName(assist.get().getFirstName() + " " + assist.get().getLastName());
         }
 
         if(goal.getMatchId() != null){

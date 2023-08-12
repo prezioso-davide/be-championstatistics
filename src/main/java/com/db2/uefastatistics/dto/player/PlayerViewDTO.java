@@ -21,5 +21,6 @@ public class PlayerViewDTO {
     int weight;
     String foot;
     String teamId;
+    String teamName;
 
 }
