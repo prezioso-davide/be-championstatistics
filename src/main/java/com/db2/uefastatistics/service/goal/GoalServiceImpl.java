@@ -96,15 +96,16 @@ public class GoalServiceImpl implements GoalService{
     @Override
     public List<GoalViewDTO> getGoalsByMatchId(String matchId) {
         ObjectId objectId = new ObjectId(matchId);
-        List<Goal> list = goalRepository.findByMatchId(objectId);
         List<GoalViewDTO> listDTO = new ArrayList<>();
 
-        if(list.isEmpty()) {
-            throw new RuntimeException("Nessun goal trovato");
-        }
+        try {
+            List<Goal> list = goalRepository.findByMatchId(objectId);
 
-        for (Goal p: list) {
-            listDTO.add(entityToDTO(p));
+            for (Goal p: list) {
+                listDTO.add(entityToDTO(p));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return listDTO;
@@ -154,12 +155,12 @@ public class GoalServiceImpl implements GoalService{
             throw new RuntimeException("Nessun marcatore trovato");
         }
 
-        ObjectId assist = new ObjectId(createDTO.getAssist());
-        Optional<Player> assistOPT = playerRepository.findById(createDTO.getAssist());
-        if (assistOPT.isPresent()){
-            goal.setAssist(assist);
-        } else {
-            throw new RuntimeException("Nessun assist trovato");
+        if(createDTO.getAssist() != null) {
+            ObjectId assist = new ObjectId(createDTO.getAssist());
+            Optional<Player> assistOPT = playerRepository.findById(createDTO.getAssist());
+            if (assistOPT.isPresent()){
+                goal.setAssist(assist);
+            }
         }
 
         ObjectId matchId = new ObjectId(createDTO.getMatchId());
@@ -185,12 +186,12 @@ public class GoalServiceImpl implements GoalService{
             throw new RuntimeException("Nessun marcatore trovato");
         }
 
-        ObjectId assist = new ObjectId(updateDTO.getAssist());
-        Optional<Player> assistOPT = playerRepository.findById(updateDTO.getAssist());
-        if (assistOPT.isPresent()){
-            goal.setAssist(assist);
-        } else {
-            throw new RuntimeException("Nessun assist trovato");
+        if(updateDTO.getAssist() != null) {
+            ObjectId assist = new ObjectId(updateDTO.getAssist());
+            Optional<Player> assistOPT = playerRepository.findById(updateDTO.getAssist());
+            if (assistOPT.isPresent()) {
+                goal.setAssist(assist);
+            }
         }
 
         ObjectId matchId = new ObjectId(updateDTO.getMatchId());
@@ -214,13 +215,21 @@ public class GoalServiceImpl implements GoalService{
         if(goal.getPlayerId() != null){
             Optional<Player> player = playerRepository.findById(goal.getPlayerId().toString());
             goalDTO.setPlayerId(goal.getPlayerId().toString());
-            goalDTO.setPlayerFullName(player.get().getFirstName() + " " + player.get().getLastName());
+            if(player.get().getFirstName() != null){
+                goalDTO.setPlayerFullName(player.get().getFirstName() + " " + player.get().getLastName());
+            } else {
+                goalDTO.setPlayerFullName(player.get().getLastName());
+            }
         }
 
         if(goal.getAssist() != null){
             Optional<Player> assist = playerRepository.findById(goal.getAssist().toString());
             goalDTO.setAssist(goal.getAssist().toString());
-            goalDTO.setAssistFullName(assist.get().getFirstName() + " " + assist.get().getLastName());
+            if(assist.get().getFirstName() != null){
+                goalDTO.setAssistFullName(assist.get().getFirstName() + " " + assist.get().getLastName());
+            } else {
+                goalDTO.setAssistFullName(assist.get().getLastName());
+            }
         }
 
         if(goal.getMatchId() != null){
