@@ -73,15 +73,17 @@ public class TeamServiceImpl implements TeamService{
     @Override
     public List<TeamViewDTO> getTeamsByStadiumId(String stadiumId) {
         ObjectId objectId = new ObjectId(stadiumId);
-        List<Team> list = teamRepository.findByStadiumId(objectId);
         List<TeamViewDTO> listDTO = new ArrayList<>();
 
-        if(list.isEmpty()) {
-            throw new RuntimeException("Nessuna squadra trovata");
-        }
-
-        for (Team t: list) {
-            listDTO.add(entityToDTO(t));
+        try{
+            List<Team> list = teamRepository.findByStadiumId(objectId);
+            if(!list.isEmpty()) {
+                for (Team t: list) {
+                    listDTO.add(entityToDTO(t));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return listDTO;
