@@ -50,15 +50,16 @@ public class StadiumServiceImpl implements StadiumService{
 
     @Override
     public List<StadiumViewDTO> getStadiumsByCountry(String country) {
-        List<Stadium> list = stadiumRepository.findByCountry(country);
         List<StadiumViewDTO> listDTO = new ArrayList<StadiumViewDTO>();
 
-        if(list.isEmpty()) {
-            throw new RuntimeException("Nessuno stadio trovato");
-        }
+        try {
+            List<Stadium> list = stadiumRepository.findByCountry(country);
 
-        for (Stadium s: list) {
-            listDTO.add(entityToDTO(s));
+            for (Stadium s: list) {
+                listDTO.add(entityToDTO(s));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return listDTO;
