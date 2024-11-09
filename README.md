@@ -28,6 +28,9 @@ git clone https://github.com/prezioso-davide/be-championstatistics.git
 
 3) Avvia il progetto utilizzando il tasto "Run"
 
+## Dataset
+
+Il dataset è accessibile al seguente link: https://zenodo.org/records/14059982?token=eyJhbGciOiJIUzUxMiJ9.eyJpZCI6ImM5NTc0MGJlLTczNmMtNDk4Zi1iMjc4LTIxZDY2YjNlNTgzZSIsImRhdGEiOnt9LCJyYW5kb20iOiIwY2Y3MzQ0MTFlY2I4MjhhNDA0MDhiY2E1M2Y2MTUyZSJ9.rlnsI_YYrWzCqgwzUJrMBhJinNgQKkV0Ve2SDKoSQTJg0mgo08qIGMk6FwSHGYKpvOJVrcWX3HRv64yvl2tSvQ
 
 ## Info Utili
 
